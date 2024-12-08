@@ -22,6 +22,10 @@ test_endpoint() {
         response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request DELETE "$FS_BASE_URL$endpoint" \
             --header 'Content-Type: application/x-www-form-urlencoded' \
             --data-urlencode 'id=1')
+    elif [[ "$method" == "PATCH" ]]; then
+        response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PATCH "$CPP_BASE_URL$endpoint" \
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'id=1' --data-urlencode 'name=Fajar')
     fi
 
     http_status=$(echo "$response" | sed -n 's/.*HTTPSTATUS:\([0-9]*\)$/\1/p')
@@ -56,3 +60,11 @@ test_endpoint "PUT" "/users" 200 '{"status":"OK","code":200}'
 test_endpoint "GET" "/users" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Fajar"}]}'
 test_endpoint "DELETE" "/users" 200 '{"status":"OK","code":200}'
 test_endpoint "GET" "/users" 200 '{"status":"OK","code":200,"data":[]}'
+
+test_endpoint "PATCH" "/users" 405 '{"status":"Method Not Allowed","code":405}'
+
+test_endpoint "GET" "/user" 404 '{"status":"Not Found","code":404}'
+test_endpoint "POST" "/user" 404 '{"status":"Not Found","code":404}'
+test_endpoint "PUT" "/user" 404 '{"status":"Not Found","code":404}'
+test_endpoint "DELETE" "/user" 404 '{"status":"Not Found","code":404}'
+test_endpoint "PATCH" "/user" 404 '{"status":"Not Found","code":404}'
