@@ -69,7 +69,7 @@ test_endpoint() {
 }
 
 test_endpoint "GET" "/users" 200 '{"status":"OK","code":200,"data":[]}'
-test_endpoint "POST" "/users" 201 '{"status":"Created","code":201}' "Yuda" ""
+test_endpoint "POST" "/users" 201 '{"status":"Created","code":201}' "Yuda" " "
 test_endpoint "GET" "/users" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Yuda"}]}'
 test_endpoint "PUT" "/users" 200 '{"status":"OK","code":200}' "Fajar" "1"
 test_endpoint "GET" "/users" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Fajar"}]}'
@@ -77,42 +77,42 @@ test_endpoint "DELETE" "/users" 200 '{"status":"OK","code":200}' "" "1"
 test_endpoint "GET" "/users" 200 '{"status":"OK","code":200,"data":[]}'
 
 test_endpoint "GET" "/users?" 200 '{"status":"OK","code":200,"data":[]}'
-test_endpoint "POST" "/users?" 201 '{"status":"Created","code":201}' "Yuda" ""
+test_endpoint "POST" "/users?" 201 '{"status":"Created","code":201}' "Yuda" " "
 test_endpoint "GET" "/users?" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Yuda"}]}'
 test_endpoint "PUT" "/users?" 200 '{"status":"OK","code":200}' "Fajar" "1"
 test_endpoint "GET" "/users?" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Fajar"}]}'
-test_endpoint "DELETE" "/users" 200 '{"status":"OK","code":200}' "" "1"
+test_endpoint "DELETE" "/users" 200 '{"status":"OK","code":200}' " " "1"
 test_endpoint "GET" "/users?" 200 '{"status":"OK","code":200,"data":[]}'
 
 test_endpoint "GET" "/users/" 200 '{"status":"OK","code":200,"data":[]}'
-test_endpoint "POST" "/users/" 201 '{"status":"Created","code":201}' "Yuda" ""
+test_endpoint "POST" "/users/" 201 '{"status":"Created","code":201}' "Yuda" " "
 test_endpoint "GET" "/users/" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Yuda"}]}'
 test_endpoint "PUT" "/users/" 200 '{"status":"OK","code":200}' "Fajar" "1"
 test_endpoint "GET" "/users/" 200 '{"status":"OK","code":200,"data":[{"id":1,"name":"Fajar"}]}'
-test_endpoint "DELETE" "/users" 200 '{"status":"OK","code":200}' "" "1"
+test_endpoint "DELETE" "/users" 200 '{"status":"OK","code":200}' " " "1"
 test_endpoint "GET" "/users/" 200 '{"status":"OK","code":200,"data":[]}'
 
 test_endpoint "PATCH" "/users" 405 '{"status":"Method Not Allowed","code":405}'
 
 test_endpoint "GET" "/user" 404 '{"status":"Not Found","code":404}'
-test_endpoint "POST" "/user" 404 '{"status":"Not Found","code":404}' "Yuda" ""
+test_endpoint "POST" "/user" 404 '{"status":"Not Found","code":404}' "Yuda" " "
 test_endpoint "PUT" "/user" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
-test_endpoint "DELETE" "/user" 404 '{"status":"Not Found","code":404}' "" "1"
+test_endpoint "DELETE" "/user" 404 '{"status":"Not Found","code":404}' " " "1"
 test_endpoint "PATCH" "/user" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
 
 test_endpoint "GET" "/users1" 404 '{"status":"Not Found","code":404}'
-test_endpoint "POST" "/users1" 404 '{"status":"Not Found","code":404}' "Yuda" ""
+test_endpoint "POST" "/users1" 404 '{"status":"Not Found","code":404}' "Yuda" " "
 test_endpoint "PUT" "/users1" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
-test_endpoint "DELETE" "/users1" 404 '{"status":"Not Found","code":404}' "" "1"
+test_endpoint "DELETE" "/users1" 404 '{"status":"Not Found","code":404}' " " "1"
 test_endpoint "PATCH" "/users1" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
 
 test_endpoint "GET" "/users/users" 404 '{"status":"Not Found","code":404}'
-test_endpoint "POST" "/users/users" 404 '{"status":"Not Found","code":404}' "Yuda" ""
+test_endpoint "POST" "/users/users" 404 '{"status":"Not Found","code":404}' "Yuda" " "
 test_endpoint "PUT" "/users/users" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
-test_endpoint "DELETE" "/users/users" 404 '{"status":"Not Found","code":404}' "" "1"
+test_endpoint "DELETE" "/users/users" 404 '{"status":"Not Found","code":404}' " " "1"
 test_endpoint "PATCH" "/users/users" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
 
-test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}' "" ""
-test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "Fajar" ""
-test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "" "1"
+test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}' " " " "
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "Fajar" " "
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' " " "1"
 test_endpoint "DELETE" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' parameter"}' "" ""
