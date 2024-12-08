@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FS_BASE_URL="http://localhost:6005"
+FS_BASE_URL="http://localhost:6012"
 
 test_endpoint() {
     local method=$1
@@ -24,11 +24,11 @@ test_endpoint() {
             --data-urlencode 'id=1')
     fi
 
-    http_status=$(echo "$response" | sed -e 's/.*HTTPSTATUS://')
+    http_status=$(echo "$response" | sed -n 's/.*HTTPSTATUS:\([0-9]*\)$/\1/p')
     response_body=$(echo "$response" | sed -e 's/HTTPSTATUS:.*//')
 
-    clean_response_body=$(echo "$response_body" | sed -e 's/[[:space:]]//g')
-    clean_expected_body=$(echo "$expected_body" | sed -e 's/[[:space:]]//g')
+    clean_response_body=$(echo "$response_body" | tr -d '[:space:]')
+    clean_expected_body=$(echo "$expected_body" | tr -d '[:space:]')
 
     if [[ "$http_status" -ne "$expected_status" ]]; then
         echo "FAILED: $method $endpoint (Expected Status: $expected_status, Got: $http_status)"
