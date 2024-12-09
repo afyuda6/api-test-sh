@@ -15,19 +15,32 @@ test_endpoint() {
     elif [[ "$method" == "POST" ]]; then
         if [[ -z "$name" ]]; then
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request POST "$VB_BASE_URL$endpoint" \
-                --header 'Content-Type: application/x-www-form-urlencoded')
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --header 'Content-Length: 0')
         else
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request POST "$VB_BASE_URL$endpoint" \
                 --header 'Content-Type: application/x-www-form-urlencoded' \
                 --data-urlencode "name=$name")
         fi
     elif [[ "$method" == "PUT" ]]; then
-        curl_data=()
-        [[ -n "$id" ]] && curl_data+=(--data-urlencode "id=$id")
-        [[ -n "$name" ]] && curl_data+=(--data-urlencode "name=$name")
-
-        response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$VB_BASE_URL$endpoint" \
-            --header 'Content-Type: application/x-www-form-urlencoded' "${curl_data[@]}")
+        if [[ -z "$name" && -z "$id" ]]; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$VB_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --header 'Content-Length: 0')
+        elif [[ -z "$name" ]]; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$VB_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode "id=$id")
+        elif [[ -z "$id" ]]; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$VB_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode "name=$name")
+        else
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$VB_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode "name=$name" \
+                --data-urlencode "id=$id")
+        fi
     elif [[ "$method" == "DELETE" ]]; then
         if [[ -z "$id" ]]; then
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request DELETE "$VB_BASE_URL$endpoint" \
@@ -115,6 +128,15 @@ test_endpoint "DELETE" "/users/users" 404 '{"status":"Not Found","code":404}' " 
 test_endpoint "PATCH" "/users/users" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
 
 test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}' " " " "
+test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}' "" ""
+test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}'
 test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "Fajar" " "
 test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' " " "1"
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "Fajar" ""
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "" "1"
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' " " " "
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "" ""
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}'
 test_endpoint "DELETE" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' parameter"}' " " " "
+test_endpoint "DELETE" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' parameter"}' "" ""
+test_endpoint "DELETE" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' parameter"}'

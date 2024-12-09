@@ -34,8 +34,7 @@ test_endpoint() {
                 --header 'Content-Type: application/x-www-form-urlencoded')
         else
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request DELETE "$GO_BASE_URL$endpoint?id=$id" \
-                --header 'Content-Type: application/x-www-form-urlencoded' \
-                --data-urlencode "id=$id")
+                --header 'Content-Type: application/x-www-form-urlencoded')
         fi
     elif [[ "$method" == "PATCH" ]]; then
         response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PATCH "$GO_BASE_URL$endpoint" \
@@ -113,6 +112,14 @@ test_endpoint "DELETE" "/users/users" 404 '{"status":"Not Found","code":404}' " 
 test_endpoint "PATCH" "/users/users" 404 '{"status":"Not Found","code":404}' "Fajar" "1"
 
 test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}' " " " "
+test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}' "" ""
+test_endpoint "POST" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''name'\'' parameter"}'
 test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "Fajar" " "
 test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' " " "1"
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "Fajar" ""
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "" "1"
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' " " " "
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}' "" ""
+test_endpoint "PUT" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' or '\''name'\'' parameter"}'
 test_endpoint "DELETE" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' parameter"}' "" ""
+test_endpoint "DELETE" "/users" 400 '{"status":"Bad Request","code":400, "errors":"Missing '\''id'\'' parameter"}'
