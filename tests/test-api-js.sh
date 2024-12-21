@@ -15,19 +15,32 @@ test_endpoint() {
     elif [[ "$method" == "POST" ]]; then
         if [[ -z "$name" ]]; then
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request POST "$JS_BASE_URL$endpoint" \
-                --header 'Content-Type: application/x-www-form-urlencoded')
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --header 'Content-Length: 0')
         else
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request POST "$JS_BASE_URL$endpoint" \
                 --header 'Content-Type: application/x-www-form-urlencoded' \
                 --data-urlencode "name=$name")
         fi
     elif [[ "$method" == "PUT" ]]; then
-        curl_data=()
-        [[ -n "$id" ]] && curl_data+=(--data-urlencode "id=$id")
-        [[ -n "$name" ]] && curl_data+=(--data-urlencode "name=$name")
-
-        response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$JS_BASE_URL$endpoint" \
-            --header 'Content-Type: application/x-www-form-urlencoded' "${curl_data[@]}")
+        if [[ -z "$name" && -z "$id" ]]; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$JS_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --header 'Content-Length: 0')
+        elif [[ -z "$name" ]]; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$JS_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode "id=$id")
+        elif [[ -z "$id" ]]; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$JS_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode "name=$name")
+        else
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request PUT "$JS_BASE_URL$endpoint" \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode "name=$name" \
+                --data-urlencode "id=$id")
+        fi
     elif [[ "$method" == "DELETE" ]]; then
         if [[ -z "$id" ]]; then
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request DELETE "$JS_BASE_URL$endpoint" \

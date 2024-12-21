@@ -41,7 +41,6 @@ test_endpoint() {
                 --data-urlencode "name=$name" \
                 --data-urlencode "id=$id")
         fi
-    
     elif [[ "$method" == "DELETE" ]]; then
         if [[ -z "$id" ]]; then
             response=$(curl -s -w "HTTPSTATUS:%{http_code}" --request DELETE "$RB_BASE_URL$endpoint" \
