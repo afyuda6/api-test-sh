@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PHP_BASE_URL="http://localhost:6004"
+PHP_BASE_URL="http://localhost:6003"
 
 test_endpoint() {
     local method=$1

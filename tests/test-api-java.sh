@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAVA_BASE_URL="http://localhost:6002"
+JAVA_BASE_URL="http://localhost:6005"
 
 test_endpoint() {
     local method=$1

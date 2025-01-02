@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GO_BASE_URL="http://localhost:6001"
+GO_BASE_URL="http://localhost:6004"
 
 test_endpoint() {
     local method=$1

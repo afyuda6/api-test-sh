@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CS_BASE_URL="http://localhost:6005"
+CS_BASE_URL="http://localhost:6002"
 
 test_endpoint() {
     local method=$1

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PY_BASE_URL="http://localhost:6003"
+PY_BASE_URL="http://localhost:6006"
 
 test_endpoint() {
     local method=$1
